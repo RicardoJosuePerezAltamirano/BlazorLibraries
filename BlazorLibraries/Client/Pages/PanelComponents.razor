@@ -1,0 +1,31 @@
+﻿<!--
+
+El evento ondragover especifica dónde se pueden soltar los datos arrastrados.
+
+De forma predeterminada, los datos / elementos no se pueden eliminar en otros elementos.
+    Para permitir una caída, debemos evitar el manejo predeterminado del elemento.
+
+Esto se hace llamando al método event.preventDefault () para el evento ondragover:
+-->
+<div style="border: 1px solid black; height:300px;"
+     ondragover="event.preventDefault();"
+     ondragstart="event.dataTransfer.setData('', event.target.id);"
+     
+     
+     @ondrop="catchDrop" 
+     >
+    @if (textModelComponents != null && textModelComponents.Count > 0)
+    {
+        foreach (var component in textModelComponents)
+        {
+            <TextComponent Text="@component.Text"></TextComponent><br />
+        }
+    }
+
+</div>
+
+@code {
+
+
+
+}

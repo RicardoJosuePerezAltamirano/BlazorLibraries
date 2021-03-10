@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>BlazorLibraries</title>
+    <base href="/" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="BlazorLibraries.Client.styles.css" rel="stylesheet" />
+    <link href="manifest.json" rel="manifest" />
+    <link rel="apple-touch-icon" sizes="512x512" href="icon-512.png" />
+    
+</head>
+
+<body>
+    <div id="app">Loading...</div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
+    <script>navigator.serviceWorker.register('service-worker.js');</script>
+    <script>
+        window.helloWorld = (message)=> {
+            alert(message);
+        }
+        //_---------------------------------------------------------------------------------FIRMA
+        var canvas;
+        var signaturePad;
+        window.loadCanvas = () => {
+            // tomamos el objeto DOM
+            canvas = document.getElementById('signature-pad');
+            //creamos en nuevo panel
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)'
+                
+                //solo es necesario el color para salvar JPEG , si el dato es PNG o SVG se puede quitar
+            });
+        }
+        window.SavePng = function () {
+            if (signaturePad.isEmpty()) {
+                return alert("Please provide a signature first.");
+            }
+
+            var data = signaturePad.toDataURL('image/png');
+            console.log(data);
+            window.open(data);
+        }
+        window.Clean = function () {
+            signaturePad.clear();
+        }
+//_---------------------------------------------------------------------------------PDF
+        var PdfVisorState;
+        // creamos objeto simple para almacenar el estado del visor PDF
+        window.LoadPdf = function () {
+            PdfVisorState = {
+                pdf: null,
+                currentPage: 1,
+                zoom: 1
+            }
+
+    // obtener documento
+            pdfjsLib.getDocument('https://www2.deloitte.com/content/dam/Deloitte/co/Documents/technology/Tendencias_tecnologicas_2019%20(Reporte%20Completo).pdf').then((pdf) => {
+                PdfVisorState.pdf = pdf;
+                //setear el documento 
+                render();
+            });
+        }
+        function render() {
+        /*
+             * Al invocar al método getPage() del objeto pdf
+             * vamos a enviarle la propiedad currentPage de nuestro objeto de estado.
+             * Este método también devuelve una promesa asi que hay que gestionar la respuesta
+             * */
+            PdfVisorState.pdf.getPage(PdfVisorState.currentPage).then((page) => {
+                
+
+                /*
+                 * Como argumentos, el método espera el contexto del dibujo en el lienzo, en este caso 2D 
+                 * seteamos width y heigth con el viewport del acercamiento
+                 
+                 * */
+                
+                var canvas = document.getElementById("pdf_renderer");
+                var ctx = canvas.getContext('2d');
+
+                var viewport = page.getViewport(PdfVisorState.zoom);
+                canvas.width = viewport.width;
+                canvas.height = viewport.height;
+                // renderizamos
+
+                page.render({
+                    canvasContext: ctx,
+                    viewport: viewport
+                });
+            });
+        }
+        window.prevPage = function () {
+            //pasamos a pagina anterior
+            if (PdfVisorState.pdf == null
+                || PdfVisorState.currentPage == 1) return;
+            PdfVisorState.currentPage -= 1;
+            document.getElementById("current_page")
+                .value = PdfVisorState.currentPage;
+            render();
+        }
+        window.nextPage = function () {
+            // pasamos al siguiente pagina
+            if (PdfVisorState.pdf == null
+                || PdfVisorState.currentPage > PdfVisorState.pdf
+                    ._pdfInfo.numPages)
+                return;
+
+            PdfVisorState.currentPage += 1;
+            document.getElementById("current_page")
+                .value = PdfVisorState.currentPage;
+            render();
+        }
+
+    </script>
+</body>
+
+</html>

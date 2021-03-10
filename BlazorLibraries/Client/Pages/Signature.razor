@@ -1,0 +1,32 @@
+﻿@inject IJSRuntime JS
+<strong>Firma</strong>
+<div class="wrapper">
+    <canvas id="signature-pad" class="signature-pad" width=600 height=200></canvas>
+</div>
+
+<button @onclick="Save">Save as PNG</button>
+
+<button id="clear" @onclick="Clean">Clear</button>
+
+@code {
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("loadCanvas");
+
+        }
+
+
+    }
+    public async Task Save()
+    {
+        await JS.InvokeVoidAsync("SavePng");
+    }
+    public async Task Clean()
+    {
+        await JS.InvokeVoidAsync("Clean");
+    }
+
+
+}

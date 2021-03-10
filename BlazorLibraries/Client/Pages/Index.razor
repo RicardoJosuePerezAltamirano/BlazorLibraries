@@ -1,0 +1,24 @@
+﻿@page "/"
+@inject IJSRuntime JS
+<button class="btn btn-primary" @onclick=@(async ()=> {await JS.InvokeVoidAsync("helloWorld", "hola en blazor"); })>Saluda</button>
+
+<Signature></Signature>
+<PDF></PDF>
+
+<DragAndDrop></DragAndDrop>
+@code{
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+    }
+    protected override async Task OnInitializedAsync()
+    {
+
+       
+    }
+
+    
+    
+}
+

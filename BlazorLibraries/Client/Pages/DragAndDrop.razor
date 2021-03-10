@@ -1,0 +1,33 @@
+﻿@using BlazorLibraries.Shared
+<strong>drag and drop </strong>
+
+<PanelComponents textModelComponents="ModelComponents"></PanelComponents>
+<!--
+    con propiedad draggable podemos hacer al elemento arrastrable
+    el atributo ondragstart llama a una función, drag (evento), que especifica qué datos se van a arrastrar.
+
+    -->
+<div style="height:120px"></div>
+<p draggable="true" class="draggable"   @ondragend="HandleDrop" style="">@TextLocalComponent </p>
+
+
+@code{ 
+
+    [Inject]
+    public DemoViewModel DemoViewModel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ModelComponents = new List<Model>();
+    }
+    List<Model> ModelComponents = new List<Model>();
+    string TextLocalComponent = "Hola mundo";
+
+    /*-----------drag--------*/
+    private void HandleDrop(DragEventArgs e)
+    {
+        DemoViewModel.ModelSelected = new Model() { Text = TextLocalComponent };
+
+        //ModelComponents.Add(new Model() { Text = TextLocalComponent });
+    }
+}

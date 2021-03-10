@@ -1,0 +1,34 @@
+﻿@inject IJSRuntime JS
+<string>pdf</string>
+<div id="my_pdf_viewer">
+    <div id="canvas_container">
+        <!-- en este canvas se van a desplegar las paginas del archivo PDF-->
+        <canvas id="pdf_renderer">
+        </canvas>
+        <div id="navigation_controls">
+            <button id="go_previous" @onclick="prevPage">Previous</button>
+            <input id="current_page" value="1" type="number" />
+            <button id="go_next" @onclick="nextPage">Next</button>
+        </div>
+    </div>
+</div>
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        await JS.InvokeVoidAsync("LoadPdf");
+    }
+
+
+    /*-------------prev pdf------*/
+    private async Task prevPage()
+    {
+        await JS.InvokeVoidAsync("prevPage");
+    }
+    private async Task nextPage()
+    {
+        await JS.InvokeVoidAsync("nextPage");
+    }
+
+
+}

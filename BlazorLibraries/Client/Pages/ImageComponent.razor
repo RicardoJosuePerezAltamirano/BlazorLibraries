@@ -1,0 +1,23 @@
+﻿@using System.Linq
+<img id="drag1"
+     src="https://p4.wallpaperbetter.com/wallpaper/377/631/812/vw-golf-6-gti-tuning-wallpaper-preview.jpg"
+     draggable="true"   @ondragstart="HandleDrop">
+@code{
+    private void HandleDrop(DragEventArgs e)
+    {
+
+
+        //if (AllowedStatuses != null && !AllowedStatuses.Contains(Container.Payload.Status)) return;
+
+        //await Container.UpdateJobAsync(ListStatus);
+        Console.WriteLine(e.Type);
+        Console.WriteLine(e.DataTransfer.Items.Length);
+        Console.WriteLine(e.DataTransfer.Types.Length);
+        e.DataTransfer.Items = new DataTransferItem[1];
+        e.DataTransfer.Items[0] = new DataTransferItem() { Kind = "<p>Hola mundo <p>", Type = "text/html" };
+
+        //datatranfer.Add(new DataTransferItem() { Kind = "<p>Hola mundo <p>", Type = "text/html" });
+        Console.WriteLine(e.DataTransfer.Items.Length);
+        StateHasChanged();
+    }
+}
