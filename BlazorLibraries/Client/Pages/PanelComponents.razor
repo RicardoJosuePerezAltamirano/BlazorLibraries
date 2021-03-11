@@ -18,10 +18,12 @@ Esto se hace llamando al método event.preventDefault () para el evento ondragov
     {
         foreach (var component in textModelComponents)
         {
-            <TextComponent Text="@component.Text"></TextComponent><br />
+            @if (component != null)
+            {
+                <TextComponent Text="@component.Text"></TextComponent><br />
+            }
         }
     }
-
 </div>
 
 @code {
